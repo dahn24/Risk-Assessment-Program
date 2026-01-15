@@ -25,7 +25,7 @@ for _ in range(2000):
     else:
         label = "Aggressive"
 
-    rows.append([risk, round(growth * 3.3, 3), round(loss * 3.3, 3), round(horizon * 3.3, 3), stability, round(score, 3), label])
+    rows.append([risk, round(growth * 3.3, 3), round(loss * 3.3, 3), round(horizon * 3.3, 3), stability, round(score, 2), label])
 
 df = pd.DataFrame(rows, columns=[
     "risk_comfort",
