@@ -18,14 +18,14 @@ for _ in range(2000):
         0.2 * stability
     )
 
-    if score < 3.34:
+    if score < 4.8:
         label = "Conservative"
-    elif score < 6.67:
+    elif score < 6.8:
         label = "Moderate"
     else:
         label = "Aggressive"
 
-    rows.append([risk, round(growth * 3.3, 3), round(loss * 3.3, 3), round(horizon * 3.3, 3), stability, round(score, 2), label])
+    rows.append([risk, round(growth * 3.3, 3), round(loss * 3.3, 3), round(horizon * 3.3, 3), stability, label])
 
 df = pd.DataFrame(rows, columns=[
     "risk_comfort",
@@ -33,8 +33,7 @@ df = pd.DataFrame(rows, columns=[
     "loss_tolerance",
     "time_horizon",
     "income_stability",
-    "total_score",
     "risk_category"
 ])
 
-df.to_csv("risk_profiles.csv", index=False)
+df.to_csv("risk_profiles2.csv", index=False)
