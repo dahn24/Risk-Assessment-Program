@@ -3,7 +3,7 @@ import pandas as pd
 
 rows = []
 
-for _ in range(2000):
+for _ in range(4000):
     risk = random.randint(1, 10)
     growth = random.choice([1, 2, 3])
     loss = random.choice([1, 2, 3])
@@ -11,16 +11,17 @@ for _ in range(2000):
     stability = random.randint(1, 10)
 
     score = (
-        0.2 * (3.33 * horizon) +
-        0.2 * (3.33 * growth) +
-        0.2 * (3.33 * loss) +
-        0.2 * risk +
-        0.2 * stability
+        0.2 * (horizon / 3) +
+        0.2 * (growth / 3) +
+        0.2 * (loss / 3) +
+        0.2 * (risk / 10) +
+        0.2 * (stability / 10)
     )
 
-    if score < 3.34:
+
+    if score < 0.52:
         label = "Conservative"
-    elif score < 6.67:
+    elif score < 0.71:
         label = "Moderate"
     else:
         label = "Aggressive"
