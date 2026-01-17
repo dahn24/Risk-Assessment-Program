@@ -26,7 +26,7 @@ for _ in range(4000):
     else:
         label = "Aggressive"
 
-    rows.append([risk, round(growth * 3.3, 3), round(loss * 3.3, 3), round(horizon * 3.3, 3), stability, round(score, 2), label])
+    rows.append([risk, round(growth * 3.3, 3), round(loss * 3.3, 3), round(horizon * 3.3, 3), stability, label])
 
 df = pd.DataFrame(rows, columns=[
     "risk_comfort",
@@ -34,8 +34,7 @@ df = pd.DataFrame(rows, columns=[
     "loss_tolerance",
     "time_horizon",
     "income_stability",
-    "total_score",
     "risk_category"
 ])
 
-df.to_csv("risk_profiles.csv", index=False)
+df.to_csv("risk_profiles2.csv", index=False)
