@@ -3,7 +3,7 @@ import pandas as pd
 
 rows = []
 
-for _ in range(2000):
+for _ in range(8000):
     risk = random.randint(1, 10)
     growth = random.choice([1, 2, 3])
     loss = random.choice([1, 2, 3])
