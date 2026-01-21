@@ -1,7 +1,6 @@
 import { LogOut, TrendingUp, BarChart3, PieChart, ArrowRight } from 'lucide-react';
 import { InvestingChatbot } from './InvestingChatbot';
 
-
 type InvestorType = 'conservative' | 'balanced' | 'adventurous' | null;
 
 interface DashboardProps {

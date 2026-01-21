@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
+import axios from "axios";
 import { LogOut, ArrowLeft, CheckCircle, ClipboardList } from 'lucide-react';
 
-
+/**
+ * Define the possible investor categories
+ */
 type InvestorType = 'conservative' | 'balanced' | 'adventurous';
 
 interface PreSurveyProps {
@@ -37,15 +40,14 @@ export default function App() {
   );
 }
 
+/**
+ * PreSurvey Component: Handles the quiz logic and UI
+ */
 export function PreSurvey({ user, onBack, onLogout, onComplete }: PreSurveyProps) {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [completed, setCompleted] = useState(false);
   const [investorType, setInvestorType] = useState<InvestorType | null>(null);
-
-  const [initialInvestment, setInitialInvestment] = useState(10000);
-  const [monthlyContribution, setMonthlyContribution] = useState(500);
-  const [timeHorizon, setTimeHorizon] = useState(10);
 
   const questions = [
     {
@@ -53,9 +55,9 @@ export function PreSurvey({ user, onBack, onLogout, onComplete }: PreSurveyProps
       question: "What are you prioritizing? ",
       type: 'radio',
       options: [
-        { text: "Avoiding losses", score: 0 },
-        { text: "A balance of growth and stability", score: 1 },
-        { text: "Long-term growth taking in the short-term risks", score: 2 }
+        { text: "Avoiding losses", score: 1 *3.3 },
+        { text: "A balance of growth and stability", score: 2*3.3 },
+        { text: "Long-term growth taking in the short-term risks", score: 3 *3.3 }
       ]
     },
     {
@@ -80,9 +82,9 @@ export function PreSurvey({ user, onBack, onLogout, onComplete }: PreSurveyProps
       question: "How would you feel if your investment dropped 20% in a year?",
       type: 'radio',
       options: [
-        { text: "I would want to reduce the risk immediately", score: 0 },
-        { text: "I would stay invested but feel uneasy", score: 1 },
-        { text: "I would see it as normal and stay on course", score: 2 }
+        { text: "I would want to reduce the risk immediately", score: 1 *3.30 },
+        { text: "I would stay invested but feel uneasy", score: 2*3.3 },
+        { text: "I would see it as normal and stay on course", score:  3 *3.3 }
       ]
     },
     {
@@ -90,9 +92,9 @@ export function PreSurvey({ user, onBack, onLogout, onComplete }: PreSurveyProps
       question: "What aligns with your goals?",
       type: 'radio',
       options: [
-        { text: "I prefer steady progress, even if its slow", score: 0 },
-        { text: "I’m okay with ups and downs if the results are better", score: 1 },
-        { text: "I’m comfortable with large swings if the long-term potential is higher", score: 2 }
+        { text: "I prefer steady progress, even if its slow", score: 1 *3.3 },
+        { text: "I’m okay with ups and downs if the results are better", score: 2*3.3 },
+        { text: "I’m comfortable with large swings if the long-term potential is higher", score:  3 *3.3 }
       ]
     }
   ];
@@ -120,23 +122,54 @@ export function PreSurvey({ user, onBack, onLogout, onComplete }: PreSurveyProps
     return 'adventurous';
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(prev => prev + 1);
-    } else {
-      const type = calculateType(answers);
-      setInvestorType(type);
+      return;
+    }
+
+    // 1) MAP ANSWERS TO MODEL INPUT
+    const payload = {
+      risk_comfort: answers[0],
+      time_horizon: answers[1],
+      income_stability: answers[2],
+      loss_tolerance: answers[3],
+      growth_preference: answers[4],
+    };
+
+    try {
+      // 2) SEND TO NODE BACKEND
+      console.log("Sending payload:", payload);
+
+      const res = await axios.post(
+        "http://localhost:3001/api/survey/submit",
+        payload
+      );
+
+      // 3) GET RISK CATEGORY FROM BACKEND RESPONSE
+      const risk_category = res.data.survey.risk_category;
+
+      // 4) MAP TO UI LABELS
+      setInvestorType(
+        risk_category === "Aggressive"
+          ? "adventurous"
+          : risk_category === "Moderate"
+            ? "balanced"
+            : "conservative"
+      );
+
       setCompleted(true);
+    } catch (err) {
+      console.error(err);
+      alert("Something went wrong. Try again.");
     }
   };
 
-  const calculateInvestment = (init:number, monthly:number, years:number, rate:number)=>{
-    const m = rate/100/12, n = years*12;
-    return init*Math.pow(1+m,n)+ monthly*((Math.pow(1+m,n)-1)/m);
-  };
+  
 
+  // Inline styles for basic layout without external CSS dependencies
   const styles = {
-    container: { fontFamily: 'Montserrat,sans-serif', padding: '20px', maxWidth: '600px', margin: '0 auto', color: '#333' },
+    container: { fontFamily: 'sans-serif', padding: '20px', maxWidth: '600px', margin: '0 auto', color: '#333' },
     card: { background: '#f9f9f9', padding: '30px', borderRadius: '12px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' },
     button: { padding: '10px 20px', borderRadius: '8px', cursor: 'pointer', border: 'none', fontWeight: 'bold' },
     nextBtn: { backgroundColor: '#10b981', color: 'white' },
@@ -168,44 +201,6 @@ export function PreSurvey({ user, onBack, onLogout, onComplete }: PreSurveyProps
       </div>
     );
   }
-    */
-if (completed && investorType) {
-  return (
-    <div className="completed-page">
-      <header className="navbar">
-        <div className="nav-inner">
-          <div className="nav-left">
-            <ClipboardList color="#10b981" size={20} />
-            <span className="brand">Pre-Survey Results</span>
-          </div>
-          <button className="nav-btn" onClick={onLogout}>
-            <LogOut size={18} /> Logout
-          </button>
-        </div>
-      </header>
-
-      {/* This wrapper uses flex: 1 to fill all remaining height and center the card */}
-      <div className="completed-wrapper">
-        <div className="completed-card">
-          <CheckCircle color="#10b981" size={48} />
-          <span className="title">Your Investor Profile</span>
-          <span className="result">
-            <strong>{investorType.toUpperCase()} INVESTOR</strong>
-          </span> 
-          <span className="blurb">
-            Based on your answers, we've identified the best investment strategy for you.
-          </span>
-          <button 
-            className="button-dash"
-            onClick={() => onComplete?.(investorType)}
-          >
-            Go to Dashboard
-          </button>
-        </div>
-      </div>
-    </div> // Closing completed-page
-  );
-}
 
   const q = questions[currentQuestion];
   const progress = ((currentQuestion + 1) / questions.length) * 100;
