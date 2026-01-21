@@ -181,9 +181,11 @@ export function PreSurvey({ user, onBack, onLogout, onComplete }: PreSurveyProps
   };
 
   // Result Screen
+  /*
   if (completed && investorType) {
     return (
       <div style={styles.container}>
+
         <div style={styles.card as any}>
           <CheckCircle color="#10b981" size={48} />
           <h1>You're all set!</h1>
@@ -204,76 +206,92 @@ export function PreSurvey({ user, onBack, onLogout, onComplete }: PreSurveyProps
   const progress = ((currentQuestion + 1) / questions.length) * 100;
 
   return (
-    <div style={styles.container}>
-      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <ClipboardList color="#10b981" />
-          <span style={{ fontWeight: 'bold' }}>Investor Quiz</span>
+     <div className="presurvey-page">
+      <header className="navbar">
+        <div className="nav-inner">
+          <div className="nav-left">
+            <ClipboardList />
+            <span className="brand">Pre-Survey</span>
+          </div>
+          <button className="nav-btn" onClick={onLogout}>
+            <LogOut size={18} /> Logout
+          </button>
         </div>
-        <button onClick={onLogout} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#666' }}>
-          <LogOut size={18} /> Logout
-        </button>
       </header>
 
-      <main style={styles.card as any}>
-        <button onClick={onBack} style={{ background: 'none', border: 'none', color: '#666', cursor: 'pointer', marginBottom: '15px' }}>
-          <ArrowLeft size={14} /> Back to Home
-        </button>
+      <main className="presurvey-main">
+        <button className="back-link" onClick={onBack}>
+            <ArrowLeft size={14} /> Back to Dashboard
+          </button>
+        <div className="presurvey-card">
+          <div className="progress-bar">
+            <div className="progress-fill" style={{ width: `${progress}%` }} />
+          </div>
 
-        <div style={styles.progressBar}>
-          <div style={styles.progressFill(progress) as any} />
-        </div>
+          <h2 className="question-title">{q.question}</h2>
 
-        <h2 style={{ fontSize: '20px', marginBottom: '20px' }}>{q.question}</h2>
-
-        <div style={{ marginBottom: '30px' }}>
-          {q.type === 'radio' ? (
-            q.options?.map((opt, i) => (
-              <button
-                key={i}
-                style={{
-                  ...styles.radioOption,
-                  ...(answers[currentQuestion] === opt.score ? styles.selectedOption : {})
-                } as any}
-                onClick={() => setAnswers({...answers, [currentQuestion]: opt.score})}
-              >
-                {opt.text}
-              </button>
-            ))
-          ) : (
-            <div>
-              <input
-                type="range"
-                min={q.min}
-                max={q.max}
-                style={{ width: '100%' }}
-                value={answers[currentQuestion] ?? q.min}
-                onChange={(e) => setAnswers({...answers, [currentQuestion]: Number(e.target.value)})}
-              />
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px', color: '#666', fontSize: '14px' }}>
-                <span>{q.labels?.min}</span>
-                <span style={{ fontWeight: 'bold', color: '#10b981' }}>{answers[currentQuestion] ?? q.min} {q.unit || ''}</span>
-                <span>{q.labels?.max}</span>
+          <div className="options">
+            {q.type === 'radio' ? (
+              q.options?.map((opt, i) => (
+                <button
+                  key={i}
+                  className={`option-btn ${answers[currentQuestion] === opt.score ? 'selected' : ''}`}
+                  onClick={() => setAnswers({ ...answers, [currentQuestion]: opt.score })}
+                >
+                  <span className="radio-circle"></span>
+                  {opt.text}
+                </button>
+              ))
+            ) : (
+              <div className="slider-group">
+                <input
+                  type="range"
+                  min={q.min}
+                  max={q.max}
+                  value={answers[currentQuestion] ?? q.min}
+                  onChange={e => setAnswers({ ...answers, [currentQuestion]: Number(e.target.value) })}
+                  style={{
+                    background: q.type === 'slider' && q.min !== undefined && q.max !== undefined
+                      ? (() => {
+                      const range = q.max - q.min;
+                      const relativeValue = (answers[currentQuestion] ?? q.min) - q.min;
+                      const percentage = (relativeValue / range) * 100;
+                      return `linear-gradient(to right, 
+                      #10b981 0%, 
+                      #0a8c61 ${percentage}%, 
+                      rgba(255, 255, 255, 0.1) ${percentage}%, 
+                      rgba(255, 255, 255, 0.1) 100%)`;
+                     })()
+                      : 'rgba(255, 255, 255, 0.1)'
+                       }}
+                />
+                <div className="slider-labels">
+                  <span>{q.labels?.min}</span>
+                  <span className="slider-value">
+                    {answers[currentQuestion] ?? q.min} {q.unit || ''}
+                  </span>
+                  <span>{q.labels?.max}</span>
+                </div>
               </div>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
 
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <button
-            style={styles.backBtn}
-            onClick={() => setCurrentQuestion(p => Math.max(0, p - 1))}
-            disabled={currentQuestion === 0}
-          >
-            Back
-          </button>
-          <button
-            style={{...styles.button, ...styles.nextBtn}}
-            onClick={handleNext}
-            disabled={answers[currentQuestion] === undefined}
-          >
-            {currentQuestion === questions.length - 1 ? 'Finish' : 'Next'}
-          </button>
+          <div className="nav-actions">
+            <button
+              className="btn-secondary"
+              onClick={() => setCurrentQuestion(p => Math.max(0, p - 1))}
+              disabled={currentQuestion === 0}
+            >
+              Back
+            </button>
+            <button
+              className="btn-primary"
+              onClick={handleNext}
+              disabled={answers[currentQuestion] === undefined}
+            >
+              {currentQuestion === questions.length - 1 ? 'Finish' : 'Next'}
+            </button>
+          </div>
         </div>
       </main>
     </div>

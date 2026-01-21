@@ -30,87 +30,105 @@ export function Dashboard({ user, onLogout, onStartSurvey, investorType }: Dashb
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
-      <nav className="bg-slate-900/80 backdrop-blur-sm border-b border-slate-700 shadow-lg">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center gap-2">
-              <TrendingUp className="w-6 h-6 text-emerald-400" />
-              <span className="font-semibold text-white">InvestorHub</span>
-            </div>
-            <button
-              onClick={onLogout}
-              className="flex items-center gap-2 px-4 py-2 text-gray-300 hover:text-white hover:bg-slate-800 rounded-lg transition-colors"
-            >
-              <LogOut className="w-5 h-5" />
-              <span>Logout</span>
-            </button>
-          </div>
+    <div className="dashboard-wrapper">
+  <nav className="navbar">
+    <div className="brand">
+      <TrendingUp style={{ width: 24, height: 24, color: '#10b981'  }} />
+      <span>MyRisk Assistant</span>
+    </div>
+    <button onClick={onLogout}>
+      <LogOut style={{ width: 20, height: 20 }} />
+      <span>Logout</span>
+    </button>
+  </nav>
+
+  <main className="dashboard-main">
+    <div className="dashboard-card">
+      {/* Welcome Section */}
+      <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+        <div
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: '80px',
+            height: '80px',
+            borderRadius: '50%',
+            marginBottom: '1rem',
+            border: '2px solid rgba(5, 150, 105, 0.3)',
+            backgroundColor: 'rgba(5, 150, 105, 0.1)',
+          }}
+        >
+          <TrendingUp style={{ width: 40, height: 40, color: '#10b981' }} />
         </div>
-      </nav>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="bg-slate-800/50 backdrop-blur-sm rounded-lg shadow-2xl border border-slate-700 p-8 mb-8">
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-emerald-500/10 rounded-full mb-4 border-2 border-emerald-500/30">
-              <TrendingUp className="w-10 h-10 text-emerald-400" />
-            </div>
-            <h1 className="text-4xl font-bold text-white mb-2">
-              Welcome to InvestorHub
-            </h1>
-            <p className="text-slate-300">
-              Logged in as <span className="font-medium text-emerald-400">{user}</span>
-            </p>
-          </div>
+        <h1>Welcome to MyRisk Assistant</h1>
+        <p>
+          Logged in as <span style={{ color: '#10b981', fontWeight: 700 }}>{user}</span>
+        </p>
+      </div>
 
-          {!investorType ? (
-            <div className="max-w-3xl mx-auto mb-8">
-              <div className="bg-gradient-to-r from-blue-900/40 to-purple-900/40 rounded-lg p-6 border border-blue-700/30">
-                <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
-                  <PieChart className="w-6 h-6 text-blue-400" />
-                  Know Your Investor Type
-                </h2>
-                <p className="text-slate-300 leading-relaxed mb-6">
-                  Understanding your investor profile is the first step toward building a successful investment strategy. 
+      {/* Pre-survey card */}
+      {!investorType && (
+        <div style={{
+          maxWidth: '768px',
+          margin: '0 auto 2rem auto',
+          padding: '1.5rem',
+          borderRadius: '0.625rem',
+          border: '1px solid rgba(59, 130, 246, 0.3)',
+          background: 'linear-gradient(to right, rgba(30, 64, 175, 0.4), rgba(139, 92, 246, 0.4))'
+        }}>
+          <h2 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 600, color: 'white', marginBottom: '1rem',fontSize:'18px'}}>
+            <PieChart style={{ width: 24, height: 24, color: '#60a5fa' }} />
+            Know Your Investor Type
+          </h2>
+          <p style={{ color: '#cbd5e1', lineHeight: 1.5, marginBottom: '1.5rem' }}>
+             Understanding your investor profile is the first step toward building a successful investment strategy. 
                   Whether you're a conservative investor seeking steady returns, an aggressive trader looking for high-growth 
                   opportunities, or somewhere in between, knowing your risk tolerance, investment timeline, and financial goals 
                   will help you make informed decisions that align with your unique circumstances. Our pre-survey will help 
                   identify your investor type and provide personalized recommendations tailored to your financial journey.
-                </p>
-                <button
-                  onClick={onStartSurvey}
-                  className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors flex items-center justify-center gap-2 shadow-lg shadow-emerald-900/30"
-                >
-                  Take Pre-Survey
-                  <ArrowRight className="w-5 h-5" />
-                </button>
-              </div>
-            </div>
-          ) : null}
+          </p>
+          <button className="button-dash" onClick={onStartSurvey}>
+            Take Pre-Survey <ArrowRight style={{ width: 20, height: 20 }} />
+          </button>
+        </div>
+      )}
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-4xl mx-auto">
-            <div className="bg-slate-900/50 border border-slate-700 rounded-lg p-6 text-center">
-              <BarChart3 className="w-8 h-8 text-blue-400 mx-auto mb-3" />
-              <div className="text-2xl font-bold text-white mb-1">$0.00</div>
-              <div className="text-sm text-slate-400">Portfolio Value</div>
-            </div>
-            <div className="bg-slate-900/50 border border-slate-700 rounded-lg p-6 text-center">
-              <TrendingUp className="w-8 h-8 text-emerald-400 mx-auto mb-3" />
-              <div className="text-2xl font-bold text-white mb-1">0%</div>
-              <div className="text-sm text-slate-400">Total Returns</div>
-            </div>
-            <div className="bg-slate-900/50 border border-slate-700 rounded-lg p-6 text-center">
-              <PieChart className="w-8 h-8 text-purple-400 mx-auto mb-3" />
-              <div className={`text-2xl font-bold mb-1 ${getInvestorTypeColor()}`}>{getInvestorTypeDisplay()}</div>
-              <div className="text-sm text-slate-400">Investor Type</div>
-            </div>
-          </div>
+      {/* Grid */}
+      <div className="dashboard-grid">
+        <div className="card">
+          <BarChart3 style={{ width: 32, height: 32, color: '#60a5fa', margin: '0 auto 0.75rem auto' }} />
+          <div style={{ fontWeight: 700, fontSize: '1.5rem', color: 'white', marginBottom: '0.25rem' }}>$0.00</div>
+          <div style={{ fontSize: '0.875rem', color: '#94a3b8' }}>Portfolio Value</div>
         </div>
 
-        {investorType && (
+        <div className="card">
+          <TrendingUp style={{ width: 32, height: 32, color: '#10b981', margin: '0 auto 0.75rem auto' }} />
+          <div style={{ fontWeight: 700, fontSize: '1.5rem', color: 'white', marginBottom: '0.25rem' }}>0%</div>
+          <div style={{ fontSize: '0.875rem', color: '#94a3b8' }}>Total Returns</div>
+        </div>
+
+        <div className="card">
+          <PieChart style={{ width: 32, height: 32, color: '#c084fc', margin: '0 auto 0.75rem auto' }} />
+          <div className={`text-2xl font-bold mb-1 ${
+            investorType === 'conservative' ? 'investor-conservative' :
+            investorType === 'balanced' ? 'investor-balanced' :
+            investorType === 'adventurous' ? 'investor-adventurous' :
+            'investor-default'
+          }`} style={{ fontWeight: 700, fontSize: '1.5rem', marginBottom: '0.25rem' }}>
+            {investorType ? investorType.charAt(0).toUpperCase() + investorType.slice(1) : 'Not Set'}
+          </div>
+          <div style={{ fontSize: '0.875rem', color: '#94a3b8' }}>Investor Type</div>
+        </div>
+      </div>
+    </div>
+    {investorType && (
           <InvestingChatbot investorType={investorType} />
         )}
-      </main>
-    </div>
+  </main>
+</div>
+
+
   );
 }

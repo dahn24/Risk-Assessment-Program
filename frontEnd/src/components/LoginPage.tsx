@@ -71,116 +71,163 @@ export function LoginPage({ onLogin }: LoginPageProps) {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        <div className="bg-white rounded-lg shadow-lg p-8">
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
-              {isSignUp ? (
-                <UserPlus className="w-8 h-8 text-blue-600" />
-              ) : (
-                <LogIn className="w-8 h-8 text-blue-600" />
-              )}
-            </div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              {isSignUp ? 'Create Account' : 'Welcome Back'}
-            </h1>
-            <p className="text-gray-600">
-              {isSignUp
-                ? 'Sign up to get started'
-                : 'Sign in to your account'}
-            </p>
+    <div className="page-wrapper" style={{ fontFamily: "'Montserrat', sans-serif" }}>
+      <div className="card" style={{ maxWidth: '400px', width: '100%', backgroundColor:'white'}}>
+        {/* Header */}
+        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+          <div
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '64px',
+              height: '64px',
+              backgroundColor: '#dbeafe', // matches blue-100
+              borderRadius: '50%',
+              marginBottom: '0.1rem',
+            }}
+          >
+            {isSignUp ? (
+              <UserPlus style={{ width: '32px', height: '32px', color: '#2563eb' }} />
+            ) : (
+              <LogIn style={{ width: '32px', height: '32px', color: '#2563eb' }} />
+            )}
           </div>
 
-          {error && (
-            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg flex items-start gap-2">
-              <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-              <p className="text-sm text-red-600">{error}</p>
+          <h1 style={{ fontSize: '1.875rem', 
+            fontWeight: 790, 
+            marginBottom: '0.5rem', 
+            fontFamily: "'Montserrat', sans-serif",
+            letterSpacing: '-0.025em' }}>
+            {isSignUp ? 'Create Account' : 'Welcome Back'}
+          </h1>
+          <p style={{ color: '#4b5563',fontFamily: "'Montserrat', sans-serif"}}>
+            {isSignUp ? 'Sign up to get started' : 'Sign in to your account'}
+          </p>
+        </div>
+
+        {/* Error Message */}
+        {error && (
+          <div
+            style={{
+              marginBottom: '1rem',
+              padding: '0.25rem',
+              backgroundColor: '#fef2f2',
+              border: '1px solid #fca5a5',
+              borderRadius: '0.625rem',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+            }}
+          >
+            <AlertCircle style={{ width: '20px', height: '20px', color: '#ea1616', flexShrink: 0, marginBottom: '0.1px', marginLeft:'0.5rem' }} />
+            <p style={{ fontSize: '0.875rem', color: '#ea1616',fontFamily: "'Montserrat', sans-serif" }}>{error}</p>
+          </div>
+        )}
+
+        {/* Form */}
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          {/* Email */}
+          <div>
+            <label htmlFor="email" style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, marginBottom: '0.25rem',textAlign: 'left',fontFamily: "'Montserrat', sans-serif"}}>
+              Email
+            </label>
+            <div style={{ position: 'relative' }}>
+              <Mail style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', color: '#9ca3af', width: '20px', height: '20px' }} />
+              <input
+                type="email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
+                style={{
+                  width: '100%',
+                  padding: '0.5rem 1rem 0.5rem 2.5rem',
+                  borderRadius: '0.625rem',
+                  border: '1px solid #d1d5db',
+                  backgroundColor: '#fcfcff',
+                  outline: 'none',
+                  fontFamily: "'Montserrat', sans-serif"
+                }}
+              />
+            </div>
+          </div>
+
+          {/* Password */}
+          <div>
+            <label htmlFor="password" style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, marginBottom: '0.25rem',textAlign:'left', fontFamily: "'Montserrat', sans-serif"}}>
+              Password
+            </label>
+            <div style={{ position: 'relative' }}>
+              <Lock style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', color: '#9ca3af', width: '20px', height: '20px' }} />
+              <input
+                type="password"
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                style={{
+                  width: '100%',
+                  padding: '0.5rem 1rem 0.5rem 2.5rem',
+                  borderRadius: '0.625rem',
+                  border: '1px solid #d1d5db',
+                  backgroundColor: '#fbfbff',
+                  outline: 'none',
+                  fontFamily: "'Montserrat', sans-serif"
+                }}
+              />
+            </div>
+          </div>
+
+          {/* Confirm Password for Sign Up */}
+          {isSignUp && (
+            <div>
+              <label htmlFor="confirmPassword" style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, marginBottom: '0.25rem',textAlign:'left', fontFamily: "'Montserrat', sans-serif"}}>
+                Confirm Password
+              </label>
+              <div style={{ position: 'relative' }}>
+                <Lock style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', color: '#9ca3af', width: '20px', height: '20px' }} />
+                <input
+                  type="password"
+                  id="confirmPassword"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder="••••••••"
+                  style={{
+                    width: '100%',
+                    padding: '0.5rem 1rem 0.5rem 2.5rem',
+                    borderRadius: '0.625rem',
+                    border: '1px solid #d1d5db',
+                    backgroundColor: '#ffffff',
+                    outline: 'none',
+                    fontFamily: "'Montserrat', sans-serif"
+                  }}
+                />
+              </div>
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                Email
-              </label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input
-                  type="email"
-                  id="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-                  placeholder="you@example.com"
-                />
-              </div>
-            </div>
+          {/* Submit Button */}
+          <button type="submit" className="button-primary" style={{ width: '100%', fontFamily: "'Montserrat', sans-serif"}}>
+            {isSignUp ? 'Sign Up' : 'Sign In'}
+          </button>
+        </form>
 
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-                Password
-              </label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input
-                  type="password"
-                  id="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-                  placeholder="••••••••"
-                />
-              </div>
-            </div>
-
-            {isSignUp && (
-              <div>
-                <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
-                  Confirm Password
-                </label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                  <input
-                    type="password"
-                    id="confirmPassword"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-                    placeholder="••••••••"
-                  />
-                </div>
-              </div>
-            )}
-
-            <button
-              type="submit"
-              className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors font-medium"
-            >
-              {isSignUp ? 'Sign Up' : 'Sign In'}
-            </button>
-          </form>
-
-          <div className="mt-6 text-center">
-            <button
-              onClick={() => {
-                setIsSignUp(!isSignUp);
-                setError('');
-                setEmail('');
-                setPassword('');
-                setConfirmPassword('');
-              }}
-              className="text-blue-600 hover:text-blue-700 font-medium"
-            >
-              {isSignUp
-                ? 'Already have an account? Sign in'
-                : "Don't have an account? Sign up"}
-            </button>
-          </div>
+        {/* Switch Sign In / Sign Up */}
+        <div style={{ marginTop: '1.5rem', textAlign: 'center' }}>
+          <button
+            onClick={() => {
+              setIsSignUp(!isSignUp);
+              setError('');
+              setEmail('');
+              setPassword('');
+              setConfirmPassword('');
+            }}
+            style={{ color: '#2563eb', fontWeight: 700, background: 'none', border: 'none', cursor: 'pointer', fontFamily: "'Montserrat', sans-serif" }}
+          >
+            {isSignUp ? 'Already have an account? Sign in' : "Don't have an account? Sign up"}
+          </button>
         </div>
-
-        <p className="text-center text-sm text-gray-500 mt-4">
-        </p>
       </div>
     </div>
   );
