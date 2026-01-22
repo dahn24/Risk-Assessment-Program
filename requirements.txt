@@ -16,3 +16,14 @@ python-dotenv
 tiktoken
 pydantic==1.10.8
 flask                         # ✅ Add this so it's available
+
+# ML
+tensorflow
+keras
+scikit-learn
+numpy
+pandas
+matplotlib
+
+#DB
+pymongo
