@@ -76,7 +76,7 @@ Context:
 User Question:
 {question}
 
-If you do not know what the user is asking, replay with "I'm sorry, could you be more specific?
+If you do not know what the user is asking, reply with "I'm sorry, could you be more specific?".
 """
 
 prompt = ChatPromptTemplate.from_template(template)
