@@ -132,82 +132,58 @@ export function InvestingChatbot({ investorType }: InvestingChatbotProps) {
     }
   };
 
-  return (
-    <div className="bg-slate-800/50 backdrop-blur-sm rounded-lg shadow-2xl border border-slate-700">
-      <div className="bg-gradient-to-r from-emerald-600 to-blue-600 p-4 rounded-t-lg flex items-center gap-3">
-        <MessageCircle className="w-6 h-6 text-white" />
-        <div>
-          <h3 className="font-semibold text-white">AI Investing Assistant</h3>
-          <p className="text-sm text-emerald-100">Ask me anything about investing</p>
-        </div>
-      </div>
-
-      <div className="h-96 overflow-y-auto p-4 space-y-4">
-        {messages.map((message) => (
-          <div
-            key={message.id}
-            className={`flex gap-3 ${message.sender === 'user' ? 'flex-row-reverse' : 'flex-row'}`}
-          >
-            <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
-              message.sender === 'bot' ? 'bg-emerald-500/20' : 'bg-blue-500/20'
-            }`}>
-              {message.sender === 'bot' ? (
-                <Bot className="w-5 h-5 text-emerald-400" />
-              ) : (
-                <User className="w-5 h-5 text-blue-400" />
-              )}
-            </div>
-            <div className={`flex-1 max-w-[80%] ${message.sender === 'user' ? 'items-end' : 'items-start'}`}>
-              <div className={`rounded-lg p-3 ${
-                message.sender === 'bot'
-                  ? 'bg-slate-700 text-slate-100'
-                  : 'bg-blue-600 text-white'
-              }`}>
-                <p className="text-sm leading-relaxed">{message.text}</p>
-              </div>
-              <span className="text-xs text-slate-500 mt-1 block">
-                {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-              </span>
-            </div>
-          </div>
-        ))}
-        
-        {isTyping && (
-          <div className="flex gap-3">
-            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center">
-              <Bot className="w-5 h-5 text-emerald-400" />
-            </div>
-            <div className="bg-slate-700 rounded-lg p-3">
-              <div className="flex gap-1">
-                <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-                <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-                <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
-              </div>
-            </div>
-          </div>
-        )}
-        <div ref={messagesEndRef} />
-      </div>
-
-      <div className="p-4 border-t border-slate-700">
-        <div className="flex gap-2">
-          <input
-            type="text"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            onKeyPress={handleKeyPress}
-            placeholder="Ask about stocks, ETFs, risk management..."
-            className="flex-1 bg-slate-900/50 border border-slate-700 rounded-lg px-4 py-2 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-          />
-          <button
-            onClick={handleSendMessage}
-            disabled={!inputValue.trim()}
-            className="bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-700 disabled:cursor-not-allowed text-white p-2 rounded-lg transition-colors"
-          >
-            <Send className="w-5 h-5" />
-          </button>
-        </div>
+ return (
+  <div className="chat-container">
+    <div className="chat-header">
+      <MessageCircle style={{ width: 24, height: 24, color: 'white' }} />
+      <div>
+        <h3>AI Investing</h3>
+        <p>Ask me anything about investing</p>
       </div>
     </div>
-  );
+
+    <div className="chat-messages">
+      {messages.map((message) => (
+        <div key={message.id} className={`message-row ${message.sender === 'user' ? 'user' : ''}`}>
+          <div className={`avatar ${message.sender === 'bot' ? 'bot' : 'user'}`}>
+            {message.sender === 'bot' ? (
+              <Bot style={{ width: 18, height: 18, color: '#10b981' }} />
+            ) : (
+              <User style={{ width: 18, height: 18, color: '#3b82f6' }} />
+            )}
+          </div>
+          
+          <div className="bubble-container">
+            <div className="bubble">
+              <p style={{ margin: 0 }}>{message.text}</p>
+            </div>
+            <span className="timestamp">
+              {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+            </span>
+          </div>
+        </div>
+      ))}
+      <div ref={messagesEndRef} />
+    </div>
+
+    <div className="chat-footer">
+      <div className="input-wrapper">
+        <input
+          type="text"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          onKeyPress={handleKeyPress}
+          placeholder="Ask about stocks, ETFs, risk management..."
+        />
+        <button 
+          className="send-button" 
+          onClick={handleSendMessage} 
+          disabled={!inputValue.trim()}
+        >
+          <Send style={{ width: 20, height: 20, color: '#94a3b8' }} />
+        </button>
+      </div>
+    </div>
+  </div>
+);
 }

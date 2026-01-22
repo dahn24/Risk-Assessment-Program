@@ -147,28 +147,12 @@ export function PreSurvey({ user, onBack, onLogout, onComplete }: PreSurveyProps
     progressFill: (p: number) => ({ height: '100%', width: `${p}%`, background: '#10b981', transition: 'width 0.3s' })
   };
 
-  // Result Screen
-  /*
-  if (completed && investorType) {
-    return (
-      <div style={styles.container}>
+  const totalQuestions = questions.length;
+  const currentStep = currentQuestion + 1;
+  const progressPercentage = Math.round((currentStep / totalQuestions) * 100);
 
-        <div style={styles.card as any}>
-          <CheckCircle color="#10b981" size={48} />
-          <h1>You're all set!</h1>
-          <p>Your profile is: <strong>{investorType.toUpperCase()}</strong></p>
-          <p>Based on your answers, we've identified the best investment strategy for you.</p>
-          <button 
-            style={{...styles.button, ...styles.nextBtn}}
-            onClick={() => onComplete?.(investorType)}
-          >
-            Go to Dashboard
-          </button>
-        </div>
-      </div>
-    );
-  }
-    */
+  // Result Screen
+  
 if (completed && investorType) {
   return (
     <div className="completed-page">
@@ -229,6 +213,30 @@ if (completed && investorType) {
             <ArrowLeft size={14} /> Back to Dashboard
           </button>
         <div className="presurvey-card">
+          <div style={{ 
+               display: 'flex', 
+              justifyContent: 'space-between', 
+              alignItems: 'center',
+              marginBottom: '0.75rem'
+            }}>
+       <span style={{ 
+            color: '#94a3b8', 
+            fontSize: '0.9rem', 
+            fontWeight: 600,
+            fontFamily: 'Montserrat, sans-serif' 
+        }}>
+            Question {currentStep} of {totalQuestions}
+          </span>
+          
+          <span style={{ 
+            color: '#10b981', 
+            fontSize: '0.9rem', 
+            fontWeight: 700,
+            fontFamily: 'Montserrat, sans-serif'
+          }}>
+            {progressPercentage}% Complete
+          </span>
+        </div>
           <div className="progress-bar">
             <div className="progress-fill" style={{ width: `${progress}%` }} />
           </div>

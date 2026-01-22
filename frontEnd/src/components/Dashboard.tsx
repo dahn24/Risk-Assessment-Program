@@ -32,16 +32,17 @@ export function Dashboard({ user, onLogout, onStartSurvey, investorType }: Dashb
 
   return (
     <div className="dashboard-wrapper">
-  <nav className="navbar">
-    <div className="brand">
-      <TrendingUp style={{ width: 24, height: 24, color: '#10b981'  }} />
-      <span>MyRisk Assistant</span>
-    </div>
-    <button onClick={onLogout}>
-      <LogOut style={{ width: 20, height: 20 }} />
-      <span>Logout</span>
-    </button>
-  </nav>
+      <header className="navbar">
+        <div className="nav-inner">
+          <div className="nav-left">
+            <TrendingUp style={{ width: 24, height: 24, color: '#10b981'}} />
+            MyRisk Assistant
+          </div>
+          <button className="nav-btn" onClick={onLogout}>
+            <LogOut style={{ width: 20, height: 20 }} /> Logout
+          </button>
+        </div>
+      </header>
 
   <main className="dashboard-main">
     <div className="dashboard-card">
@@ -123,10 +124,11 @@ export function Dashboard({ user, onLogout, onStartSurvey, investorType }: Dashb
           <div style={{ fontSize: '0.875rem', color: '#94a3b8' }}>Investor Type</div>
         </div>
       </div>
+      
     </div>
     {investorType && (
           <InvestingChatbot investorType={investorType} />
-        )}
+          )}
   </main>
 </div>
 
