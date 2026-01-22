@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: risk-assessment-program
+    env: python
+    repo: https://github.com/dahn24/Risk-Assessment-Program
+    branch: main
+    pythonVersion: 3.11.8
