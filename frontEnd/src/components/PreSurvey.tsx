@@ -8,7 +8,7 @@ import { LogOut, ArrowLeft, CheckCircle, ClipboardList } from 'lucide-react';
 type InvestorType = 'conservative' | 'balanced' | 'adventurous';
 
 interface PreSurveyProps {
-  user?: string | null;
+  user: string | null;
   onBack?: () => void;
   onLogout?: () => void;
   onComplete?: (type: InvestorType) => void;
@@ -130,6 +130,7 @@ export function PreSurvey({ user, onBack, onLogout, onComplete }: PreSurveyProps
 
     // 1) MAP ANSWERS TO MODEL INPUT
     const payload = {
+      email: user,
       risk_comfort: answers[0],
       time_horizon: answers[1],
       income_stability: answers[2],
@@ -181,26 +182,43 @@ export function PreSurvey({ user, onBack, onLogout, onComplete }: PreSurveyProps
   };
 
   // Result Screen
-  /*
   if (completed && investorType) {
-    return (
-      <div style={styles.container}>
+  return (
+    <div className="completed-page">
+      <header className="navbar">
+        <div className="nav-inner">
+          <div className="nav-left">
+            <ClipboardList color="#10b981" size={20} />
+            <span className="brand">Pre-Survey Results</span>
+          </div>
+          <button className="nav-btn" onClick={onLogout}>
+            <LogOut size={18} /> Logout
+          </button>
+        </div>
+      </header>
 
-        <div style={styles.card as any}>
+      {/* This wrapper uses flex: 1 to fill all remaining height and center the card */}
+      <div className="completed-wrapper">
+        <div className="completed-card">
           <CheckCircle color="#10b981" size={48} />
-          <h1>You're all set!</h1>
-          <p>Your profile is: <strong>{investorType.toUpperCase()}</strong></p>
-          <p>Based on your answers, we've identified the best investment strategy for you.</p>
+          <span className="title">Your Investor Profile</span>
+          <span className="result">
+            <strong>{investorType.toUpperCase()} INVESTOR</strong>
+          </span> 
+          <span className="blurb">
+            Based on your answers, we've identified the best investment strategy for you.
+          </span>
           <button 
-            style={{...styles.button, ...styles.nextBtn}}
+            className="button-dash"
             onClick={() => onComplete?.(investorType)}
           >
             Go to Dashboard
           </button>
         </div>
       </div>
-    );
-  }
+    </div> // Closing completed-page
+  );
+}
 
   const q = questions[currentQuestion];
   const progress = ((currentQuestion + 1) / questions.length) * 100;
