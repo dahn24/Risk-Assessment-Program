@@ -1,5 +1,9 @@
 # Risk-Assessment-Program
-This is a Risk Assessment Program repository that is created for the Career Launch Program 2026 at the University of Maryland, College Park. This program is not an investing advice. 
+This is a Risk Assessment Program repository that is created for the Career Launch Program 2026 at the University of Maryland, College Park. 
+
+Published 2026 Authors: David Ahn, Mihir Kulkarni, Nikita Arya, Christa Matthew.
+
+This program is not an investing advice. We do not take responsibility for the choices that the user makes. 
 
 Information provided to the RAG Model was given by chatGPT and these links: 
 https://www.investor.gov/additional-resources/general-resources/publications-research/info-sheets/beginners-guide-asset
