@@ -143,7 +143,7 @@ export function PreSurvey({ user, onBack, onLogout, onComplete }: PreSurveyProps
       console.log("Sending payload:", payload);
 
       const API_URL = import.meta.env.VITE_NODE_API_URL || "http://localhost:3001";
-      const res = await axios.post(`${API_URL}/predict`, payload);
+      const res = await axios.post(`${API_URL}/api/survey/submit`, payload);
 
       // 3) GET RISK CATEGORY FROM BACKEND RESPONSE
       const risk_category = res.data.risk_category;
