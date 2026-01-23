@@ -36,27 +36,31 @@ export function InvestingChatbot({ investorType, userEmail }: InvestingChatbotPr
     scrollToBottom();
   }, [messages]);
 
-  const handleSendMessage = async () => {
-  if (!inputValue.trim()) return;
+  const PYTHON_API_URL = import.meta.env.VITE_PYTHON_API_URL || "http://localhost:5001";
 
-  if (!userEmail || userEmail.trim() === "") {
-    console.error("No user email provided!");
-    const botMessage: Message = {
+  const handleSendMessage = async () => {
+    if (!inputValue.trim()) return;
+
+    if (!userEmail || userEmail.trim() === "") {
+      console.error("No user email provided!");
+      // ✅ CHANGED: Declare botMessage once
+      const botMessage: Message = {
+        id: Date.now().toString(),
+        text: "Error: Missing email. Cannot ask the assistant.",
+        sender: "bot",
+        timestamp: new Date()
+      };
+      setMessages(prev => [...prev, botMessage]);
+      return;
+    }
+
+ // ✅ CHANGED: Declare userMessage only once
+    const userMessage: Message = {
       id: Date.now().toString(),
-      text: "Error: Missing email. Cannot ask the assistant.",
-      sender: "bot",
+      text: inputValue,
+      sender: 'user',
       timestamp: new Date()
     };
-    setMessages(prev => [...prev, botMessage]);
-    return;
-  }
-
-  const userMessage: Message = {
-    id: Date.now().toString(),
-    text: inputValue,
-    sender: 'user',
-    timestamp: new Date()
-  };
 
   setMessages(prev => [...prev, userMessage]);
   setInputValue('');
@@ -65,35 +69,38 @@ export function InvestingChatbot({ investorType, userEmail }: InvestingChatbotPr
   console.log("Sending POST with:", { email: userEmail, question: inputValue });
 
   try {
-    const response = await fetch("http://127.0.0.1:5001/rag/ask", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: userEmail, question: inputValue })
-    });
+      // ✅ CHANGED: Use environment variable instead of localhost
+      const response = await fetch(`${PYTHON_API_URL}/rag/ask`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: userEmail, question: inputValue })
+      });
 
-    const data = await response.json();
+      const data = await response.json();
 
-    const botMessage: Message = {
-      id: (Date.now() + 1).toString(),
-      text: data.answer || "Sorry, I couldn't generate a response.",
-      sender: 'bot',
-      timestamp: new Date()
-    };
+      // ✅ CHANGED: Declare botMessage only once
+      const botMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        text: data.answer || "Sorry, I couldn't generate a response.",
+        sender: 'bot',
+        timestamp: new Date()
+      };
 
-    setMessages(prev => [...prev, botMessage]);
-  } catch (error) {
-    console.error("Error calling /rag/ask:", error);
-    const botMessage: Message = {
-      id: (Date.now() + 2).toString(),
-      text: "There was an error connecting to the server.",
-      sender: 'bot',
-      timestamp: new Date()
-    };
-    setMessages(prev => [...prev, botMessage]);
-  } finally {
-    setIsTyping(false);
-  }
-};
+      setMessages(prev => [...prev, botMessage]);
+    } catch (error) {
+      console.error("Error calling /rag/ask:", error);
+      // ✅ CHANGED: Declare botMessage only once
+      const botMessage: Message = {
+        id: (Date.now() + 2).toString(),
+        text: "There was an error connecting to the server.",
+        sender: 'bot',
+        timestamp: new Date()
+      };
+      setMessages(prev => [...prev, botMessage]);
+    } finally {
+      setIsTyping(false);
+    }
+  };
 
 
   const handleKeyPress = (e: React.KeyboardEvent) => {

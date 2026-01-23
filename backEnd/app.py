@@ -2,8 +2,9 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import joblib
 import numpy as np
-from keras.models import load_model
+from tensorflow.keras.models import load_model
 from flaskCodeRag import rag_bp
+import os
 
 app = Flask(__name__)
 CORS(app)
@@ -14,9 +15,19 @@ app.register_blueprint(rag_bp, url_prefix="/rag")
 # lgmodel = joblib.load("model.pkl")
 # lgscaler = joblib.load("scaler.pkl")
 # lgencoder = joblib.load("encoder.pkl")
-nnmodel = load_model("mlModels/nnmodel.h5")
-nnscaler = joblib.load("mlModels/nnscaler.pkl")
-nnencoder = joblib.load("mlModels/nnencoder.pkl")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+MODEL_PATH = os.path.join(BASE_DIR, "mlModels", "nnmodel.h5")
+SCALER_PATH = os.path.join(BASE_DIR, "mlModels", "nnscaler.pkl")
+ENCODER_PATH = os.path.join(BASE_DIR, "mlModels", "nnencoder.pkl")
+
+nnmodel = load_model(MODEL_PATH)
+nnscaler = joblib.load(SCALER_PATH)
+nnencoder = joblib.load(ENCODER_PATH)
+
+@app.route("/health")
+def health():
+    return {"status": "ok"}
 
 @app.route("/predict", methods=["POST"])
 def predict():
@@ -42,4 +53,5 @@ def predict():
     return jsonify({"risk_category": risk_label})
 
 if __name__ == "__main__":
-    app.run(port=5001, debug=True)
+    port = int(os.environ.get("PORT", 5001))
+    app.run(host="0.0.0.0", port=port)
