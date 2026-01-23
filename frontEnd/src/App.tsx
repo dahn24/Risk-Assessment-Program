@@ -45,7 +45,7 @@ export default function App() {
 
   const checkSurvey = async (email: string): Promise<void> => {
   try {
-    const res = await axios.get(`${nodeApi}/predict/${email}`);
+    const res = await axios.get(`${nodeApi}/predict`);
     if (res.data.survey) {
       setInvestorType(
         res.data.survey.risk_category === "Aggressive"
