@@ -146,7 +146,7 @@ export function PreSurvey({ user, onBack, onLogout, onComplete }: PreSurveyProps
       const res = await axios.post(`${API_URL}/api/survey/submit`, payload);
 
       // 3) GET RISK CATEGORY FROM BACKEND RESPONSE
-      const risk_category = res.data.risk_category;
+      const risk_category = res.data.survey.risk_category;
 
       console.log("Backend response:", res.data);
 
