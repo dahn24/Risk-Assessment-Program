@@ -19,6 +19,8 @@ flask                         # ✅ Add this so it's available
 flask-cors
 
 # ML
+tensorflow
+keras
 tensorflow-cpu
 scikit-learn
 numpy
