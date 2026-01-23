@@ -12,6 +12,9 @@ export default function App() {
   const [showSurvey, setShowSurvey] = useState(false);
   const [investorType, setInvestorType] = useState<InvestorType>(null);
 
+  // ✅ CHANGED: environment variable for Node backend
+  const nodeApi = import.meta.env.VITE_NODE_API_URL
+  
   const handleLogin = async (email: string) => {
     setIsLoggedIn(true);
     setCurrentUser(email);
