@@ -14,12 +14,12 @@ export default function App() {
 
   // ✅ CHANGED: environment variable for Node backend
   const nodeApi = import.meta.env.VITE_NODE_API_URL
-  
+
   const handleLogin = async (email: string) => {
     setIsLoggedIn(true);
     setCurrentUser(email);
     localStorage.setItem("loggedInEmail", email);
-    //await checkSurvey(email);
+    await checkSurvey(email);
   };
 
   const handleLogout = () => {
@@ -27,7 +27,7 @@ export default function App() {
     setCurrentUser(null);
     setShowSurvey(false);
     setInvestorType(null);
-   // localStorage.removeItem("loggedInEmail");
+    localStorage.removeItem("loggedInEmail");
   };
 
   const handleStartSurvey = () => {
@@ -43,26 +43,25 @@ export default function App() {
     setShowSurvey(false);
   };
 
-  // const checkSurvey = async (email: string): Promise<void> => {
-  //   try {
-  //     const res = await axios.get(`http://localhost:3001/api/survey/${email}`);
-  //     if (res.data.survey) {
-  //       setInvestorType(
-  //         res.data.survey.risk_category === "Aggressive"
-  //           ? "adventurous"
-  //           : res.data.survey.risk_category === "Moderate"
-  //             ? "balanced"
-  //             : "conservative"
-  //       );
-  //       setShowSurvey(false); // skip survey
-  //     } else {
-  //       setShowSurvey(true);
-  //     }
-  //   } catch (err) {
-  //     setShowSurvey(true); // no survey found, show survey
-  //   }
-  // }
-
+  const checkSurvey = async (email: string): Promise<void> => {
+  try {
+    const res = await axios.get(`${nodeApi}/api/survey/${email}`);
+    if (res.data.survey) {
+      setInvestorType(
+        res.data.survey.risk_category === "Aggressive"
+          ? "adventurous"
+          : res.data.survey.risk_category === "Moderate"
+            ? "balanced"
+            : "conservative"
+      );
+      setShowSurvey(false); // skip survey
+    } else {
+      setShowSurvey(true);
+    }
+  } catch (err) {
+    setShowSurvey(true); // no survey found, show survey
+  }
+}
   return (
     <div className="min-h-screen bg-gray-50">
       {!isLoggedIn ? (
