@@ -143,7 +143,7 @@ export function PreSurvey({ user, onBack, onLogout, onComplete }: PreSurveyProps
       console.log("Sending payload:", payload);
 
       const API_URL = import.meta.env.NODE_API_URL || "http://localhost:3001";
-      const res = await axios.post(`${API_URL}/api/survey/submit`, payload);
+      const res = await axios.post(`${API_URL}/predict`, payload);
 
       // 3) GET RISK CATEGORY FROM BACKEND RESPONSE
       const risk_category = res.data.survey.risk_category;
@@ -158,9 +158,9 @@ export function PreSurvey({ user, onBack, onLogout, onComplete }: PreSurveyProps
       );
 
       setCompleted(true);
-    } catch (err) {
-      console.error(err);
-      alert("Something went wrong. Try again.");
+    } catch (err: any) {
+      console.error("Survey submission error:", err.response?.data || err.message);
+      alert("Something went wrong submitting your survey. Please try again.");
     }
   };
 

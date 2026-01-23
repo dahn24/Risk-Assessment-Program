@@ -19,7 +19,7 @@ export default function App() {
     setIsLoggedIn(true);
     setCurrentUser(email);
     localStorage.setItem("loggedInEmail", email);
-    await checkSurvey(email);
+   // await checkSurvey(email);
   };
 
   const handleLogout = () => {
@@ -27,7 +27,7 @@ export default function App() {
     setCurrentUser(null);
     setShowSurvey(false);
     setInvestorType(null);
-    localStorage.removeItem("loggedInEmail");
+    //localStorage.removeItem("loggedInEmail");
   };
 
   const handleStartSurvey = () => {
@@ -38,53 +38,30 @@ export default function App() {
     setShowSurvey(false);
   };
 
-  // Called when survey finishes
-  const handleSurveyComplete = async (surveyData: any) => {
-    try {
-      const res = await axios.post(`${nodeApi}/survey/submit`, {
-        email: currentUser,
-        ...surveyData, // send all survey fields
-      });
-
-      const predicted = res.data.survey.risk_category;
-
-      setInvestorType(
-        predicted === "Aggressive"
-          ? "adventurous"
-          : predicted === "Moderate"
-          ? "balanced"
-          : "conservative"
-      );
-      setShowSurvey(false);
-    } catch (err) {
-      console.error("Survey submission failed", err);
-      alert("Something went wrong submitting your survey. Please try again.");
-    }
+  const handleSurveyComplete = (type: InvestorType) => {
+    setInvestorType(type);
+    setShowSurvey(false);
   };
 
-  // Check if user already has a survey
-  const checkSurvey = async (email: string) => {
-    try {
-      const res = await axios.get(`${nodeApi}/survey/${email}`);
-      if (res.data.survey) {
-        const predicted = res.data.survey.risk_category;
-        setInvestorType(
-          predicted === "Aggressive"
-            ? "adventurous"
-            : predicted === "Moderate"
-            ? "balanced"
-            : "conservative"
-        );
-        setShowSurvey(false); // skip survey
-      } else {
-        setShowSurvey(true); // show survey if none found
-      }
-    } catch (err) {
-      console.warn("No survey found, showing survey");
-      setShowSurvey(true);
-    }
-  };
-  
+//   const checkSurvey = async (email: string): Promise<void> => {
+//   try {
+//     const res = await axios.get(`${nodeApi}/api/survey/${email}`);
+//     if (res.data.survey) {
+//       setInvestorType(
+//         res.data.survey.risk_category === "Aggressive"
+//           ? "adventurous"
+//           : res.data.survey.risk_category === "Moderate"
+//             ? "balanced"
+//             : "conservative"
+//       );
+//       setShowSurvey(false); // skip survey
+//     } else {
+//       setShowSurvey(true);
+//     }
+//   } catch (err) {
+//     setShowSurvey(true); // no survey found, show survey
+//   }
+// }
   return (
     <div className="min-h-screen bg-gray-50">
       {!isLoggedIn ? (
