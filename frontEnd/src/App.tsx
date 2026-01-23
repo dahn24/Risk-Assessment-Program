@@ -38,30 +38,53 @@ export default function App() {
     setShowSurvey(false);
   };
 
-  const handleSurveyComplete = (type: InvestorType) => {
-    setInvestorType(type);
-    setShowSurvey(false);
+  // Called when survey finishes
+  const handleSurveyComplete = async (surveyData: any) => {
+    try {
+      const res = await axios.post(`${nodeApi}/survey/submit`, {
+        email: currentUser,
+        ...surveyData, // send all survey fields
+      });
+
+      const predicted = res.data.survey.risk_category;
+
+      setInvestorType(
+        predicted === "Aggressive"
+          ? "adventurous"
+          : predicted === "Moderate"
+          ? "balanced"
+          : "conservative"
+      );
+      setShowSurvey(false);
+    } catch (err) {
+      console.error("Survey submission failed", err);
+      alert("Something went wrong submitting your survey. Please try again.");
+    }
   };
 
-  const checkSurvey = async (email: string): Promise<void> => {
-  try {
-    const res = await axios.get(`${nodeApi}/predict`);
-    if (res.data.survey) {
-      setInvestorType(
-        res.data.survey.risk_category === "Aggressive"
-          ? "adventurous"
-          : res.data.survey.risk_category === "Moderate"
+  // Check if user already has a survey
+  const checkSurvey = async (email: string) => {
+    try {
+      const res = await axios.get(`${nodeApi}/survey/${email}`);
+      if (res.data.survey) {
+        const predicted = res.data.survey.risk_category;
+        setInvestorType(
+          predicted === "Aggressive"
+            ? "adventurous"
+            : predicted === "Moderate"
             ? "balanced"
             : "conservative"
-      );
-      setShowSurvey(false); // skip survey
-    } else {
+        );
+        setShowSurvey(false); // skip survey
+      } else {
+        setShowSurvey(true); // show survey if none found
+      }
+    } catch (err) {
+      console.warn("No survey found, showing survey");
       setShowSurvey(true);
     }
-  } catch (err) {
-    setShowSurvey(true); // no survey found, show survey
-  }
-}
+  };
+  
   return (
     <div className="min-h-screen bg-gray-50">
       {!isLoggedIn ? (
