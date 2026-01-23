@@ -19,7 +19,7 @@ exports.submitSurvey = async (req, res) => {
     let risk_category;
     try {
       const mlResponse = await axios.post(
-        `${PYTHON_API_URL}/predict`,  // CHANGED: replaced "http://localhost:5001/predict"
+        `${VITE_PYTHON_API_URL}/predict`,  // CHANGED: replaced "http://localhost:5001/predict"
         {
           risk_comfort,
           growth_preference,
