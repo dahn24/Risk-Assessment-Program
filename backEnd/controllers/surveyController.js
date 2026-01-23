@@ -29,10 +29,20 @@ exports.submitSurvey = async (req, res) => {
         },
         { timeout: 5000 } // CHANGED: added timeout
       );
+      console.log("ML response data:", mlResponse.data);
       risk_category = mlResponse.data.risk_category;
+
     } catch (err) {
-      console.error("ML service failed:", err.message); // CHANGED: more descriptive
-      return res.status(500).json({ error: "ML service unavailable" }); // CHANGED: graceful failure
+      console.error("ML service call failed!");
+      if (err.response) {
+        console.error("Status:", err.response.status);
+        console.error("Data:", err.response.data);
+      } else if (err.request) {
+        console.error("No response received:", err.request);
+      } else {
+        console.error("Error message:", err.message);
+      }
+      return res.status(500).json({ error: "ML service unavailable" });
     }
 
     const survey = await UserInputs.findOneAndUpdate(
@@ -67,7 +77,7 @@ exports.submitSurvey = async (req, res) => {
     res.status(201).json({
       success: true,
       survey,
-      rag: ragData 
+      rag: ragData
     });
 
   } catch (error) {
