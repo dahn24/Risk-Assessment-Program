@@ -148,6 +148,8 @@ export function PreSurvey({ user, onBack, onLogout, onComplete }: PreSurveyProps
       // 3) GET RISK CATEGORY FROM BACKEND RESPONSE
       const risk_category = res.data.risk_category;
 
+      console.log("Backend response:", res.data);
+
       // 4) MAP TO UI LABELS
       setInvestorType(
         risk_category === "Aggressive"
