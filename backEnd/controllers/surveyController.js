@@ -32,7 +32,7 @@ exports.submitSurvey = async (req, res) => {
             time_horizon,
             income_stability
           },
-          { timeout: 15000 } // 15s timeout per attempt
+          { timeout: 120000 } // 120s timeout per attempt
         );
         console.log("ML response data:", mlResponse.data);
         risk_category = mlResponse.data.risk_category; // stop retry if success
