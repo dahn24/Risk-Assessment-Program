@@ -2,7 +2,7 @@
 const axios = require("axios");
 const UserInputs = require("../models/userInputs");
 
-const PYTHON_API_URL = process.env.PYTHON_API_URL || "http://localhost:5001";
+const PYTHON_API_URL = process.env.VITE_PYTHON_API_URL || "http://localhost:5001";
 
 exports.submitSurvey = async (req, res) => {
   try {
@@ -19,7 +19,7 @@ exports.submitSurvey = async (req, res) => {
     let risk_category;
     try {
       const mlResponse = await axios.post(
-        `${VITE_PYTHON_API_URL}/predict`,  // CHANGED: replaced "http://localhost:5001/predict"
+        `${PYTHON_API_URL}/predict`,  // CHANGED: replaced "http://localhost:5001/predict"
         {
           risk_comfort,
           growth_preference,
