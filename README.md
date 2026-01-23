@@ -5,7 +5,7 @@ Published 2026 Authors: David Ahn, Mihir Kulkarni, Nikita Arya, Christa Matthew.
 
 This program is not an investing advice. We do not take responsibility for the choices that the user makes. 
 
-Information provided to the RAG Model was given by chatGPT and these links: 
+Information provided to the RAG Model was given by these links: 
 https://www.investor.gov/additional-resources/general-resources/publications-research/info-sheets/beginners-guide-asset
 https://www.investopedia.com/terms/c/conservativeinvesting.asp
 https://www.investopedia.com/articles/basics/09/be-a-conservative-investor.asp
