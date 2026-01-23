@@ -39,7 +39,10 @@ def get_investing_type(email: str) -> Optional[str]:
     return None
 
 # ---- Load documents and build Pinecone vector store ----
-doc = fitz.open("ragContext.pdf")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+PDF_PATH = os.path.join(BASE_DIR, "ragContext.pdf")
+
+doc = fitz.open(PDF_PATH)
 text = ""
 for i, page in enumerate(doc):
     text += page.get_text()
