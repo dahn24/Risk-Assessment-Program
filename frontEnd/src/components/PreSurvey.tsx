@@ -31,11 +31,11 @@ export default function App() {
   };
 
   return (
-    <PreSurvey
-      user="Student Learner"
-      onComplete={handleComplete}
-      onLogout={handleLogout}
-      onBack={handleBack}
+    <PreSurvey 
+      user="Student Learner" 
+      onComplete={handleComplete} 
+      onLogout={handleLogout} 
+      onBack={handleBack} 
     />
   );
 }
@@ -55,9 +55,9 @@ export function PreSurvey({ user, onBack, onLogout, onComplete }: PreSurveyProps
       question: "What are you prioritizing? ",
       type: 'radio',
       options: [
-        { text: "Avoiding losses", score: 1 * 3.3 },
-        { text: "A balance of growth and stability", score: 2 * 3.3 },
-        { text: "Long-term growth taking in the short-term risks", score: 3 * 3.3 }
+        { text: "Avoiding losses", score: 1 *3.3 },
+        { text: "A balance of growth and stability", score: 2*3.3 },
+        { text: "Long-term growth taking in the short-term risks", score: 3 *3.3 }
       ]
     },
     {
@@ -82,9 +82,9 @@ export function PreSurvey({ user, onBack, onLogout, onComplete }: PreSurveyProps
       question: "How would you feel if your investment dropped 20% in a year?",
       type: 'radio',
       options: [
-        { text: "I would want to reduce the risk immediately", score: 1 * 3.30 },
-        { text: "I would stay invested but feel uneasy", score: 2 * 3.3 },
-        { text: "I would see it as normal and stay on course", score: 3 * 3.3 }
+        { text: "I would want to reduce the risk immediately", score: 1 *3.30 },
+        { text: "I would stay invested but feel uneasy", score: 2*3.3 },
+        { text: "I would see it as normal and stay on course", score:  3 *3.3 }
       ]
     },
     {
@@ -92,9 +92,9 @@ export function PreSurvey({ user, onBack, onLogout, onComplete }: PreSurveyProps
       question: "What aligns with your goals?",
       type: 'radio',
       options: [
-        { text: "I prefer steady progress, even if its slow", score: 1 * 3.3 },
-        { text: "I’m okay with ups and downs if the results are better", score: 2 * 3.3 },
-        { text: "I’m comfortable with large swings if the long-term potential is higher", score: 3 * 3.3 }
+        { text: "I prefer steady progress, even if its slow", score: 1 *3.3 },
+        { text: "I’m okay with ups and downs if the results are better", score: 2*3.3 },
+        { text: "I’m comfortable with large swings if the long-term potential is higher", score:  3 *3.3 }
       ]
     }
   ];
@@ -146,10 +146,11 @@ export function PreSurvey({ user, onBack, onLogout, onComplete }: PreSurveyProps
       const res = await axios.post(`${API_URL}/api/survey/submit`, payload);
 
       // 3) GET RISK CATEGORY FROM BACKEND RESPONSE
-      const risk_category = res.data.survey.risk_category?.trim().toLowerCase();
+      const risk_category = res.data.survey.risk_category.trim().toLowerCase();
+      console.log("Backend risk_category:", `"${risk_category}"`);
 
       console.log("Backend response:", res.data);
-      console.log("Backend risk_category:", `"${risk_category}"`);
+
       // 4) MAP TO UI LABELS
       setInvestorType(
         risk_category === "aggressive"
@@ -166,7 +167,7 @@ export function PreSurvey({ user, onBack, onLogout, onComplete }: PreSurveyProps
     }
   };
 
-
+  
 
   // Inline styles for basic layout without external CSS dependencies
   const styles = {
@@ -183,48 +184,48 @@ export function PreSurvey({ user, onBack, onLogout, onComplete }: PreSurveyProps
 
   // Result Screen
   if (completed && investorType) {
-    return (
-      <div className="completed-page">
-        <header className="navbar">
-          <div className="nav-inner">
-            <div className="nav-left">
-              <ClipboardList color="#10b981" size={20} />
-              <span className="brand">Pre-Survey Results</span>
-            </div>
-            <button className="nav-btn" onClick={onLogout}>
-              <LogOut size={18} /> Logout
-            </button>
+  return (
+    <div className="completed-page">
+      <header className="navbar">
+        <div className="nav-inner">
+          <div className="nav-left">
+            <ClipboardList color="#10b981" size={20} />
+            <span className="brand">Pre-Survey Results</span>
           </div>
-        </header>
-
-        {/* This wrapper uses flex: 1 to fill all remaining height and center the card */}
-        <div className="completed-wrapper">
-          <div className="completed-card">
-            <CheckCircle color="#10b981" size={48} />
-            <span className="title">Your Investor Profile</span>
-            <span className="result">
-              <strong>{investorType.toUpperCase()} INVESTOR</strong>
-            </span>
-            <span className="blurb">
-              Based on your answers, we've identified the best investment strategy for you.
-            </span>
-            <button
-              className="button-dash"
-              onClick={() => onComplete?.(investorType)}
-            >
-              Go to Dashboard
-            </button>
-          </div>
+          <button className="nav-btn" onClick={onLogout}>
+            <LogOut size={18} /> Logout
+          </button>
         </div>
-      </div> // Closing completed-page
-    );
-  }
+      </header>
+
+      {/* This wrapper uses flex: 1 to fill all remaining height and center the card */}
+      <div className="completed-wrapper">
+        <div className="completed-card">
+          <CheckCircle color="#10b981" size={48} />
+          <span className="title">Your Investor Profile</span>
+          <span className="result">
+            <strong>{investorType.toUpperCase()} INVESTOR</strong>
+          </span> 
+          <span className="blurb">
+            Based on your answers, we've identified the best investment strategy for you.
+          </span>
+          <button 
+            className="button-dash"
+            onClick={() => onComplete?.(investorType)}
+          >
+            Go to Dashboard
+          </button>
+        </div>
+      </div>
+    </div> // Closing completed-page
+  );
+}
 
   const q = questions[currentQuestion];
   const progress = ((currentQuestion + 1) / questions.length) * 100;
 
   return (
-    <div className="presurvey-page">
+     <div className="presurvey-page">
       <header className="navbar">
         <div className="nav-inner">
           <div className="nav-left">
@@ -239,8 +240,8 @@ export function PreSurvey({ user, onBack, onLogout, onComplete }: PreSurveyProps
 
       <main className="presurvey-main">
         <button className="back-link" onClick={onBack}>
-          <ArrowLeft size={14} /> Back to Dashboard
-        </button>
+            <ArrowLeft size={14} /> Back to Dashboard
+          </button>
         <div className="presurvey-card">
           <div className="progress-bar">
             <div className="progress-fill" style={{ width: `${progress}%` }} />
@@ -271,17 +272,17 @@ export function PreSurvey({ user, onBack, onLogout, onComplete }: PreSurveyProps
                   style={{
                     background: q.type === 'slider' && q.min !== undefined && q.max !== undefined
                       ? (() => {
-                        const range = q.max - q.min;
-                        const relativeValue = (answers[currentQuestion] ?? q.min) - q.min;
-                        const percentage = (relativeValue / range) * 100;
-                        return `linear-gradient(to right, 
+                      const range = q.max - q.min;
+                      const relativeValue = (answers[currentQuestion] ?? q.min) - q.min;
+                      const percentage = (relativeValue / range) * 100;
+                      return `linear-gradient(to right, 
                       #10b981 0%, 
                       #0a8c61 ${percentage}%, 
                       rgba(255, 255, 255, 0.1) ${percentage}%, 
                       rgba(255, 255, 255, 0.1) 100%)`;
-                      })()
+                     })()
                       : 'rgba(255, 255, 255, 0.1)'
-                  }}
+                       }}
                 />
                 <div className="slider-labels">
                   <span>{q.labels?.min}</span>

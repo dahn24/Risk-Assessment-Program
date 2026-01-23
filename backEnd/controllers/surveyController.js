@@ -27,6 +27,7 @@ exports.submitSurvey = async (req, res) => {
           time_horizon,
           income_stability
         },
+        { timeout: 15000 } // CHANGED: added timeout
       );
       console.log("ML response data:", mlResponse.data);
       risk_category = mlResponse.data.risk_category;
