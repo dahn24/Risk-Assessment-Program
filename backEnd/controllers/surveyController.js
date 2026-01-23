@@ -16,33 +16,35 @@ exports.submitSurvey = async (req, res) => {
     } = req.body;
 
 
-    let risk_category;
-    try {
-      const mlResponse = await axios.post(
-        `${PYTHON_API_URL}/predict`,  // CHANGED: replaced "http://localhost:5001/predict"
-        {
-          risk_comfort,
-          growth_preference,
-          loss_tolerance,
-          time_horizon,
-          income_stability
-        },
-        { timeout: 15000 } // CHANGED: added timeout
-      );
-      console.log("ML response data:", mlResponse.data);
-      risk_category = mlResponse.data.risk_category;
+    let risk_category = null;
 
-    } catch (err) {
-      console.error("ML service call failed!");
-      if (err.response) {
-        console.error("Status:", err.response.status);
-        console.error("Data:", err.response.data);
-      } else if (err.request) {
-        console.error("No response received:", err.request);
-      } else {
-        console.error("Error message:", err.message);
+    // --- Retry logic for ML service ---
+    const MAX_ATTEMPTS = 3;
+    let attempts = 0;
+    while (attempts < MAX_ATTEMPTS && !risk_category) {
+      try {
+        const mlResponse = await axios.post(
+          `${PYTHON_API_URL}/predict`,
+          {
+            risk_comfort,
+            growth_preference,
+            loss_tolerance,
+            time_horizon,
+            income_stability
+          },
+          { timeout: 15000 } // 15s timeout per attempt
+        );
+        console.log("ML response data:", mlResponse.data);
+        risk_category = mlResponse.data.risk_category; // stop retry if success
+      } catch (err) {
+        attempts++;
+        console.warn(`ML attempt ${attempts} failed:`, err.message);
+
+        // Wait 1 second before retry
+        if (attempts < MAX_ATTEMPTS) {
+          await new Promise(r => setTimeout(r, 1000));
+        }
       }
-      return res.status(500).json({ error: "ML service unavailable" });
     }
 
     const survey = await UserInputs.findOneAndUpdate(
